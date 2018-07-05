@@ -1,0 +1,25 @@
+{
+  "name": "contract-crawler",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "crawler": "node scripts/crawler.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dztech/contract-crawler.git"
+  },
+  "keywords": [],
+  "author": "Yuanchao Sun <yuanchao.sun@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dztech/contract-crawler/issues"
+  },
+  "homepage": "https://github.com/dztech/contract-crawler#readme",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "puppeteer": "^1.5.0"
+  }
+}
