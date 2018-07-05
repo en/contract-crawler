@@ -6,18 +6,6 @@ const path = require('path')
 const axios = require('axios')
 const puppeteer = require('puppeteer')
 
-fs.writeFilePromise = function(path, data) {
-  return new Promise(function(resolve, reject) {
-    fs.writeFile(path, data, 'utf-8', function(err) {
-      if (err) {
-        reject(err)
-      } else {
-        resolve(data)
-      }
-    })
-  })
-}
-
 const api = axios.create({
   baseURL: 'https://api.etherscan.io'
 })
