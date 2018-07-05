@@ -23,7 +23,9 @@ const api = axios.create({
 })
 ;(async () => {
   try {
-    const browser = await puppeteer.launch()
+    const browser = await puppeteer.launch({
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
+    })
     const page = await browser.newPage()
 
     for (let i = 1; i <= 11; i++) {
@@ -31,17 +33,14 @@ const api = axios.create({
       await page.goto(url)
       const tokenSelector =
         '#ContentPlaceHolder1_divresult > table > tbody > tr > td:nth-child(3) > h5 > a'
-      const links = await page.evaluate(tokenSelector => {
+      const addrs = await page.evaluate(tokenSelector => {
         const anchors = Array.from(document.querySelectorAll(tokenSelector))
-        return anchors.map(anchor => anchor.href)
-      }, tokenSelector)
-      for (let link of links) {
-        await page.goto(link)
-        const address = await page.evaluate(() => {
-          const addressSelector =
-            '#ContentPlaceHolder1_trContract > td.tditem > a'
-          return document.querySelector(addressSelector).textContent
+        return anchors.map(anchor => {
+          const fields = anchor.href.split('/')
+          return fields[fields.length - 1]
         })
+      }, tokenSelector)
+      for (let address of addrs) {
         console.log(address)
         const response = await api.get(
           `/api?module=contract&action=getsourcecode&address=${address}`
