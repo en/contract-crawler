@@ -5,25 +5,35 @@ const path = require('path')
 
 const puppeteer = require('puppeteer')
 ;(async () => {
+  let browser, page
   try {
-    const browser = await puppeteer.launch({
+    browser = await puppeteer.launch({
       args: ['--no-sandbox', '--disable-setuid-sandbox']
     })
-    const page = await browser.newPage()
+    page = await browser.newPage()
+  } catch (err) {
+    console.error(err)
+  }
 
-    for (let i = 1; i <= 11; i++) {
-      const url = 'https://etherscan.io' + `/tokens?p=${i}`
+  for (let i = 1; i <= 11; i++) {
+    const url = 'https://etherscan.io' + `/tokens?p=${i}`
+    let links = []
+    try {
       await page.goto(url)
       const tokenSelector =
         '#ContentPlaceHolder1_divresult > table > tbody > tr > td:nth-child(3) > h5 > a'
       await page.waitForSelector(tokenSelector)
-      const links = await page.evaluate(tokenSelector => {
+      links = await page.evaluate(tokenSelector => {
         const anchors = Array.from(document.querySelectorAll(tokenSelector))
         return anchors.map(
           anchor => anchor.href.replace(/token/, 'address') + '#code'
         )
       }, tokenSelector)
-      for (let link of links) {
+    } catch (err) {
+      console.error(err)
+    }
+    for (let link of links) {
+      try {
         await page.goto(link)
         const nameSelector =
           '#ContentPlaceHolder1_contractCodeDiv > div:nth-child(2) > table > tbody > tr:nth-child(1) > td:nth-child(2)'
@@ -46,9 +56,13 @@ const puppeteer = require('puppeteer')
             console.error(err)
           }
         })
+      } catch (err) {
+        console.error(err)
       }
     }
+  }
 
+  try {
     await browser.close()
   } catch (err) {
     console.error(err)
