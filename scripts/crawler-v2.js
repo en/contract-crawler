@@ -44,7 +44,7 @@ const puppeteer = require('puppeteer')
         }, symbolSelector)
         console.log(symbol)
         const sourceSelector = '#editor'
-        await page.waitForSelector(sourceSelector)
+        await page.waitForSelector(sourceSelector, { timeout: 10000 })
         const sourceCode = await page.evaluate(
           'var editor = ace.edit("editor"); editor.getValue();'
         )
