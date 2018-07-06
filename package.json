@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "crawler": "node scripts/crawler.js",
+    "crawler-v2": "node scripts/crawler-v2.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
